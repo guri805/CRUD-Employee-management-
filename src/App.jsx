@@ -1,11 +1,10 @@
 import React, { createContext, useState } from 'react'
 import './App.css'
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import CustomNavbar from './components/CustomNavbar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AddEmp from './components/AddEmp'
-// import ViewEmp from './components/ViewEmp'
 import ListEmp from './components/ListEmp'
+import ViewEmp from './components/ViewEmp'
 
 const ListContext = createContext();
 
@@ -20,6 +19,7 @@ function App() {
             <Routes>
               <Route path="/" element={<ListEmp />} />
               <Route path="/add" element={<AddEmp />} />
+              <Route path="/view/:id" element={<ViewEmp />}/>
             </Routes>
           </div>
         </Router>

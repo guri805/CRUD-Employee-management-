@@ -1,19 +1,32 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { ListContext } from '../App';
+import { useLocation, useNavigate } from 'react-router-dom';
 const AddEmp = () => {
-    const { employeeList, setEmployeeList } = useContext(ListContext); 
+    const { employeeList, setEmployeeList } = useContext(ListContext);
+    const { state } = useLocation();
+    console.log("state", state);
+    const navigate = useNavigate();
     console.log('Employee List in AddEmp:', employeeList);
     const [data, setData] = useState({
         name: "",
         id: "",
-        designation: "",
+        designation: " ",
         email: "",
         education: "",
         address: "",
         salary: "",
         joining: "",
     });
+    const [isUpdate, setIsUpdate] = useState(false)
+    useEffect(() => {
+        if (state?.data) {
+            setIsUpdate(true)
+            setData({ ...state?.data })
+        }
+
+    }, [state?.data])
+
     const handleInput = (e) => {
         const { name, value } = e.target;
         setData({ ...data, [name]: value });
@@ -21,20 +34,29 @@ const AddEmp = () => {
 
     const handleFormData = (e) => {
         e.preventDefault();
-        setEmployeeList([...employeeList,data])
-        setData({
-            name: "",
-            id: "",
-            designation: "",
-            email: "",
-            education: "",
-            address: "",
-            salary: "",
-            joining: "",
-        })
+        if (!isUpdate) {
+            setEmployeeList([...employeeList, data]);
+            setData({
+                name: "",
+                id: "",
+                designation: "",
+                email: "",
+                education: "",
+                address: "",
+                salary: "",
+                joining: "",
+            });
+        } else {
+            const updating = employeeList?.map((item, index) =>
+                index === state?.ind ? { ...item, ...data } : item
+            );
+            setEmployeeList(updating);
+            setIsUpdate(false);
+            navigate("/");
+        }
     };
-    console.log(data);
-   
+
+
 
     return (
         <div className="container mt-4">
